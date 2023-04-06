@@ -1,0 +1,66 @@
+<definitions name="PayGreenPaymentService"
+  targetNamespace="http://ecommerce.com/paygreen"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <message name="createPaymentRequest"> <!-- Paramètres de la requêtes de paiement -->
+    <part name="amount" type="xsd:float"/>
+    <part name="currency" type="xsd:string"/>
+    <part name="cardNumber" type="xsd:string"/>
+    <part name="cardExpirationDate" type="xsd:string"/>
+    <part name="cardCvv" type="xsd:string"/>
+    <part name="description" type="xsd:string"/>
+    <part name="user" type="tns:User"/>
+  </message>
+
+  <message name="createPaymentResponse">
+    <part name="paymentId" type="xsd:string"/>
+  </message>
+
+  <complexType name="User"> <!-- Profile utilisateur -->
+    <sequence>
+      <element name="firstName" type="xsd:string"/>
+      <element name="lastName" type="xsd:string"/>
+      <element name="email" type="xsd:string"/>
+      <element name="address" type="tns:Address"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="Address">
+    <sequence>
+      <element name="street" type="xsd:string"/>
+      <element name="city" type="xsd:string"/>
+      <element name="state" type="xsd:string"/>
+      <element name="zipCode" type="xsd:string"/>
+      <element name="country" type="xsd:string"/>
+    </sequence>
+  </complexType>
+
+  <portType name="PayGreenPaymentPortType">
+    <operation name="createPayment">
+      <input message="tns:createPaymentRequest"/>
+      <output message="tns:createPaymentResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="PayGreenPaymentBinding" type="tns:PayGreenPaymentPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createPayment">
+      <soap:operation soapAction="http://ecommerce.com/paygreen/createPayment"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="PayGreenPaymentService">
+    <port name="PayGreenPaymentPort" binding="tns:PayGreenPaymentBinding">
+      <soap:address location="https://api.paygreen.fr"/> <!-- Pour l'endoint j'étais pas sûr... J'ai mis celui de PayGreen car on utilise leur API. -->
+    </port>
+  </service>
+
+</definitions>

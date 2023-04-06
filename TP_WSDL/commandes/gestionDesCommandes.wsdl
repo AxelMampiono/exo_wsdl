@@ -1,0 +1,66 @@
+<definitions name="gestion_des_commandes" OrderManagement
+  targetNamespace="http://ecommerce.com/gestion_des_commandes" http://example.com/orderManagement
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <message name="createOrderRequest"> <!-- Lancement du processus de la commande -->
+    <part name="order" type="tns:Order"/>
+  </message>
+
+  <message name="createOrderResponse">
+    <part name="orderId" type="xsd:string"/>
+  </message>
+
+  <complexType name="Order"> <!-- Contient les informations de l'utilisateur -->
+    <sequence>
+      <element name="userId" type="xsd:string"/>
+      <element name="items" type="tns:OrderItem" maxOccurs="unbounded"/>
+      <element name="total" type="xsd:float"/>
+      <element name="status" type="tns:OrderStatus"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="OrderItem"> <!-- Produit commandé -->
+    <sequence>
+      <element name="productId" type="xsd:string"/>
+      <element name="quantity" type="xsd:int"/>
+      <element name="price" type="xsd:float"/>
+    </sequence>
+  </complexType>
+
+  <simpleType name="OrderStatus"> <!-- Représente les différentes étapes de la gestion de commande -->
+    <restriction base="xsd:string">
+      <enumeration value="Created"/>
+      <enumeration value="Shipped"/>
+      <enumeration value="Delivered"/>
+    </restriction>
+  </simpleType>
+
+  <portType name="OrderManagementPortType">
+    <operation name="createOrder">
+      <input message="tns:createOrderRequest"/>
+      <output message="tns:createOrderResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="OrderManagementBinding" type="tns:OrderManagementPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createOrder">
+      <soap:operation soapAction="http://ecommerce.com/gestion_des_commandes/createOrder"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="OrderManagementService">
+    <port name="OrderManagementPort" binding="tns:OrderManagementBinding">
+      <soap:address location="http://ecommerce.com/gestion_des_commandes"/>
+    </port>
+  </service>
+
+</definitions>
