@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions name="creation_compte" 
+             targetNamespace=" http://ecomerce.com/creation_compte" 
+             xmlns="http://schemas.xmlsoap.org/wsdl/" 
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- Les définitions des types de données et des messages seront ajoutées dans les étapes suivantes. -->
+    <types>
+        <xsd.schema targetNamespace="http://ecomerce.com/creation_compte">
+            <xsd:complexType name="creation_compte">
+                <xsd:sequence>
+                    <xsd:element( name="nom" type="xsd:string")/>
+                    <xsd:element( name="prenom" type="xsd:string")/>
+                    <xsd:element( name="email" type="xsd:string")/>
+                    <xsd:element( name="password" type="xsd:string")/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd.schema>
+    </types>
+    <message name="creation_compte_input">
+        <part name="Paramètre" type="tns:creation_compte_input" />
+    </message>
+    <message name="creation_compte_output">
+        <part name="Paramètre" type="tns:creation_compte_output" />
+    </message>
+
+  <portType name="creation_compte_portType">
+    <operation name="creation_compte">
+      <input message="tns:creation_compte_input" />
+      <output message="tns:creation_compte_output" />
+    </operation>
+  </portType>
+
+  <binding name="creation_compte_binding" type="tns:creation_compte_portType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="creation_compte">
+      <soap:operation soapAction="http://example.com/creation_compte/creation_compte" />
+      <input>
+        <soap:body use="encoded" namespace="http://ecomerce.com/creation_compte" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://ecomerce.com/creation_compte" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+  </binding>
+
+  <service name="creation_compte_service">
+    <port name="creation_compte" binding="tns:creation_compte_binding">
+      <soap:address location="http://example.com/creation_compte/creation_compte" />
+    </port>
+  </service>
+  
+</definitions>
